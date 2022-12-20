@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>웹게임 프로젝트 - 구구단</title>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    class GuGuDanTitle extends React.Component {
+      render() {
+        return (
+          <>
+            <h2>구구단을 외자~ 구구단을 외자~</h2>
+            <hr />
+          </>
+        );
+      }
+    }
+
+    class GuGuDan extends React.Component {
+      state = {
+        first: Math.ceil(Math.random() * 9),
+        second: Math.ceil(Math.random() * 9),
+        value: '',
+        result: '',
+        score: 0,
+      };
+
+      // submit 이벤트
+      onSubmit = e => {
+        e.preventDefault();
+        if (parseInt(this.state.value) === this.state.first * this.state.second) {
+          this.setState(prevState => {
+            // prevState는 이전 state값을 불러올때 사용
+            return {
+              result: `${prevState.first} x ${prevState.second} = ${prevState.value} 정답!`,
+              first: Math.ceil(Math.random() * 9),
+              second: Math.ceil(Math.random() * 9),
+              value: '',
+              score: prevState.score + 1,
+            };
+          });
+          this.input.focus();
+        } else {
+          this.setState(prevState => {
+            return {
+              result: `${prevState.first} x ${prevState.second} = ${prevState.value} 땡!`,
+              value: '',
+              score: prevState.score - 1,
+            };
+          });
+          this.input.focus();
+        }
+      };
+      // input 이벤트
+      onChange = e => {
+        this.setState({ value: e.target.value });
+      };
+      // inputFocus 변수 선언
+      input;
+      inputFocus = c => {
+        this.input = c;
+      };
+      // 화면 렌더
+      render() {
+        return (
+          <>
+            <div>
+              <strong>
+                {this.state.first} 곱하기 {this.state.second}는?
+              </strong>
+            </div>
+            <form onSubmit={this.onSubmit}>
+              <input type="number" value={this.state.value} onChange={this.onChange} ref={this.inputFocus} />
+              <button type="submit">입력</button>
+            </form>
+            <div>점수 : {this.state.score}</div>
+            <div>{this.state.result}</div>
+          </>
+        );
+      }
+    }
+  </script>
+  <script type="text/babel">
+    ReactDOM.render(
+      <>
+        <GuGuDanTitle />
+        <GuGuDan />
+      </>,
+      document.querySelector('#root')
+    );
+  </script>
+</html>
