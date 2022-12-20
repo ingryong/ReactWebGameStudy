@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>웹게임 프로젝트 - 구구단</title>
+  </head>
+  <body>
+    <div id="root"></div>
+  </body>
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel">
+    const GuGuDanTitle = () => {
+      return (
+        <>
+          <h2>구구단을 외자~ 구구단을 외자~</h2>
+          <hr />
+        </>
+      );
+    };
+    const GuGuDan = () => {
+      const [first, setFirst] = React.useState(Math.ceil(Math.random() * 9));
+      const [second, setSecond] = React.useState(Math.ceil(Math.random() * 9));
+      const [value, setValue] = React.useState('');
+      const [result, setResult] = React.useState('');
+      const [score, setScore] = React.useState(0);
+      const inputRef = React.useRef();
+
+      const onSubmitForm = e => {
+        e.preventDefault();
+        if (parseInt(value) === first * second) {
+          setResult(`${first} x ${second} = ${value} 정답!`);
+          setFirst(Math.ceil(Math.random() * 9));
+          setSecond(Math.ceil(Math.random() * 9));
+          setValue('');
+          setScore(score + 1);
+          inputRef.current.focus();
+        } else {
+          setResult(`${first} x ${second} = ${value} 땡!`);
+          setValue('');
+          setScore(score - 1);
+          inputRef.current.focus();
+        }
+      };
+      const onchangeInput = e => {
+        setValue(e.target.value);
+      };
+
+      return (
+        <>
+          <div>
+            {first} 곱하기 {second} 는?
+          </div>
+          <form onSubmit={onSubmitForm}>
+            <input ref={inputRef} onChange={onchangeInput} type="number" value={value} />
+            <button>입력</button>
+          </form>
+          <div>점수 : {score}</div>
+          <div>{result}</div>
+        </>
+      );
+    };
+  </script>
+  <script type="text/babel">
+    ReactDOM.render(
+      <>
+        <GuGuDanTitle />
+        <GuGuDan />
+      </>,
+      document.querySelector('#root')
+    );
+  </script>
+</html>
