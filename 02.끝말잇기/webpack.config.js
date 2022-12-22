@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   name: 'wordrelay-setting',
@@ -19,11 +20,24 @@ module.exports = {
         test: /\.jsx?/, // js와 jsx파일에 이 룰을 적용함
         loader: 'babel-loader',
         options: {
-          presets: ['@babel/preset-env', '@babel/preset-react'],
+          presets: [
+            [
+              '@babel/preset-env',
+              {
+                targets: {
+                  browsers: ['> 5% in KR'], // 한국에서 브라우저 점유율 5% 이상 지원
+                },
+                debug: true,
+              },
+            ],
+            '@babel/preset-react',
+          ],
+          plugins: [],
         },
       },
     ],
   },
+  plugins: [new webpack.LoaderOptionsPlugin({ debug: true })],
   output: {
     // 출력
     path: path.join(__dirname, 'dist'), // path를 현재 폴더를 기준으로 만들어줌
