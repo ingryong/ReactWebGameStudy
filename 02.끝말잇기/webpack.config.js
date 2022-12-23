@@ -1,4 +1,5 @@
 const path = require('path');
+const RefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const webpack = require('webpack');
 
 module.exports = {
@@ -32,15 +33,22 @@ module.exports = {
             ],
             '@babel/preset-react',
           ],
-          plugins: [],
+          plugins: ['@babel/plugin-proposal-class-properties', 'react-refresh/babel'],
         },
       },
     ],
   },
-  plugins: [new webpack.LoaderOptionsPlugin({ debug: true })],
+  plugins: [new webpack.LoaderOptionsPlugin({ debug: true }), new RefreshWebpackPlugin()],
   output: {
     // 출력
     path: path.join(__dirname, 'dist'), // path를 현재 폴더를 기준으로 만들어줌
     filename: 'app.js',
+    publicPath: '/dist/',
+  },
+  devServer: {
+    hot: true,
+    // 아래는 webpack-cli 4v로 업데이트 되면서 이렇게 바꿔야함
+    devMiddleware: { publicPath: '/dist/' },
+    static: { directory: path.resolve(__dirname) },
   },
 };
