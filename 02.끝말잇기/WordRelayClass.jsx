@@ -1,9 +1,9 @@
 const React = require('react');
 const { Component } = React;
 
-class WordRelay extends Component {
+class WordRelayClass extends Component {
   state = {
-    word: '제로초',
+    word: '가',
     value: '',
     result: '',
   };
@@ -50,4 +50,4 @@ class WordRelay extends Component {
   }
 }
 
-module.exports = WordRelay;
+module.exports = WordRelayClass;
