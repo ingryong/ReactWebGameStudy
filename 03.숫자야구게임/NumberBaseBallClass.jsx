@@ -28,9 +28,11 @@ class NumberBaseBall extends Component {
 
     if (value === answer.join('')) {
       // 정답일 때
-      this.setState({
-        result: '홈런!',
-        tries: [...tries, { try: value, result: '홈런!' }],
+      this.setState(prevState => {
+        return {
+          result: '홈런!',
+          tries: [...prevState.tries, { try: value, result: '홈런!' }],
+        };
       });
       alert('게임을 다시 시작합니다!');
       this.setState({
@@ -66,9 +68,11 @@ class NumberBaseBall extends Component {
             ball += 1;
           }
         }
-        this.setState({
-          tries: [...tries, { try: value, result: `${strike}스트라이크, ${ball}볼 입니다.` }],
-          value: '',
+        this.setState(prevState => {
+          return {
+            tries: [...prevState.tries, { try: value, result: `${strike}스트라이크, ${ball}볼 입니다.` }],
+            value: '',
+          };
         });
       }
     }

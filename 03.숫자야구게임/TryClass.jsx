@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-// 차시 로그
+// 차시 로그 Class
 class Try extends Component {
   render() {
     const { index, value } = this.props;
