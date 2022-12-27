@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import Try from './TryHooks';
 
 // 숫자 네 개를 랜덤하게 뽑는 함수
@@ -17,6 +17,7 @@ const NumberBaseBall = () => {
   const [value, setValue] = useState('');
   const [answer, setAnswer] = useState(getNumbers);
   const [tries, setTries] = useState([]);
+  const inputEl = useRef();
 
   // 입력버튼 클릭 후 이벤트
   const onSubmitForm = e => {
@@ -63,6 +64,7 @@ const NumberBaseBall = () => {
         }
         setTries(prevTries => [...prevTries, { try: value, result: `${strike}스트라이크, ${ball}볼 입니다.` }]);
         setValue('');
+        inputEl.current.focus();
       }
     }
     return;
@@ -76,7 +78,7 @@ const NumberBaseBall = () => {
     <>
       <h1>{result}</h1>
       <form onSubmit={onSubmitForm}>
-        <input maxLength={4} value={value} onChange={onChangeInput} />
+        <input ref={inputEl} maxLength={4} value={value} onChange={onChangeInput} />
         <button>입력</button>
       </form>
       <div>시도: {tries.length}</div>

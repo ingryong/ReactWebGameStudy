@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, createRef } from 'react';
 import Try from './TryClass';
 
 // 숫자 네 개를 랜덤하게 뽑는 함수
@@ -74,6 +74,7 @@ class NumberBaseBall extends PureComponent {
             value: '',
           };
         });
+        this.inputRef.current.focus();
       }
     }
     return;
@@ -83,6 +84,8 @@ class NumberBaseBall extends PureComponent {
     this.setState({ value: e.target.value });
   };
 
+  inputRef = createRef();
+
   render() {
     // 비구조할당으로 this.state를 매번 쓰지 않아도 되도록 할 수 있다.
     const { result, value, tries } = this.state;
@@ -91,7 +94,7 @@ class NumberBaseBall extends PureComponent {
       <>
         <h1>{result}</h1>
         <form onSubmit={this.onSubmitForm}>
-          <input maxLength={4} value={value} onChange={this.onChangeInput} />
+          <input ref={this.inputRef} maxLength={4} value={value} onChange={this.onChangeInput} />
           <button>입력</button>
         </form>
         <div>시도: {tries.length}</div>

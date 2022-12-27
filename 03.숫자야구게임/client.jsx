@@ -7,7 +7,7 @@ import Test from './RenderTest';
 
 ReactDom.render(
   <>
-    <NumberBaseBallHooks />
+    <NumberBaseBallClass />
     <Test />
   </>,
   document.querySelector('#root')
