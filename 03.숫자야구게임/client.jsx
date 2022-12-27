@@ -3,5 +3,12 @@ import ReactDom from 'react-dom';
 
 import NumberBaseBallClass from './NumberBaseBallClass';
 import NumberBaseBallHooks from './NumberBaseBallHooks';
+import Test from './RenderTest';
 
-ReactDom.render(<NumberBaseBallHooks />, document.querySelector('#root'));
+ReactDom.render(
+  <>
+    <NumberBaseBallHooks />
+    <Test />
+  </>,
+  document.querySelector('#root')
+);

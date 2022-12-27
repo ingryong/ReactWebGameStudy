@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import Try from './TryClass';
 
 // 숫자 네 개를 랜덤하게 뽑는 함수
@@ -12,7 +12,7 @@ function getNumbers() {
   return array;
 }
 
-class NumberBaseBall extends Component {
+class NumberBaseBall extends PureComponent {
   state = {
     result: '',
     value: '',

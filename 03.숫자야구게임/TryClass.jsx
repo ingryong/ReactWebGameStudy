@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 // 차시 로그 Class
-class Try extends Component {
+class Try extends PureComponent {
   render() {
     const { index, value } = this.props;
     return (

@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { useState } from 'react';
 import Try from './TryHooks';
 
 // 숫자 네 개를 랜덤하게 뽑는 함수
