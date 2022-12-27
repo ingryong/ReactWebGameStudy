@@ -1,45 +1,99 @@
 import React, { Component } from 'react';
+import Try from './TryClass';
 
 // 숫자 네 개를 랜덤하게 뽑는 함수
-function getNumbers() {}
+function getNumbers() {
+  const candidate = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+  const array = [];
+  for (let i = 0; i < 4; i += 1) {
+    const chosen = candidate.splice(Math.floor(Math.random() * (9 - i)), 1)[0];
+    array.push(chosen);
+  }
+  return array;
+}
 
 class NumberBaseBall extends Component {
   state = {
     result: '',
     value: '',
     answer: getNumbers(),
-    tries: [
-      { fruit: '사과', taste: '아삭하다' },
-      { fruit: '바나나', taste: '부드럽다' },
-      { fruit: '포도', taste: '달달하다' },
-      { fruit: '딸기', taste: '새콤하다' },
-      { fruit: '귤', taste: '시다' },
-    ],
+    tries: [], // tris[{try:'',result:''}]
   };
 
+  // 입력버튼 클릭 후 이벤트
   onSubmitForm = e => {
+    e.preventDefault();
+    // 비구조할당으로 this.state를 매번 쓰지 않아도 되도록 할 수 있다.
+    const { value, answer, result, tries } = this.state;
+
+    if (value === answer.join('')) {
+      // 정답일 때
+      this.setState({
+        result: '홈런!',
+        tries: [...tries, { try: value, result: '홈런!' }],
+      });
+      alert('게임을 다시 시작합니다!');
+      this.setState({
+        value: '',
+        answer: getNumbers(),
+        tries: [],
+        result: '',
+      });
+    } else {
+      // 오답일 때
+      console.log(answer);
+      const answerArray = value.split('').map(v => parseInt(v));
+      let strike = 0;
+      let ball = 0;
+      if (tries.length >= 9) {
+        // 10번 이상 틀렸을 때
+        this.setState({
+          result: `10번 넘게 틀려서 실패! 답은 ${answer.join(',')}였습니다!`,
+        });
+        alert('게임을 다시 시작합니다!');
+        this.setState({
+          value: '',
+          answer: getNumbers(),
+          tries: [],
+          result: '',
+        });
+      } else {
+        // 10번 미만 틀렸을 때
+        for (let i = 0; i < 4; i += 1) {
+          if (answerArray[i] === answer[i]) {
+            strike += 1;
+          } else if (answer.includes(answerArray[i])) {
+            ball += 1;
+          }
+        }
+        this.setState({
+          tries: [...tries, { try: value, result: `${strike}스트라이크, ${ball}볼 입니다.` }],
+          value: '',
+        });
+      }
+    }
     return;
   };
 
   onChangeInput = e => {
-    this.setState({ value: e.currentTarget.value });
+    this.setState({ value: e.target.value });
   };
 
   render() {
+    // 비구조할당으로 this.state를 매번 쓰지 않아도 되도록 할 수 있다.
+    const { result, value, tries } = this.state;
+
     return (
       <>
-        <h1>{this.state.result}</h1>
-        <form onSubmit={this.onSubmitForm} value={this.state.value} onChange={e => this.onChangeInput}>
-          <input maxLength={4} />
+        <h1>{result}</h1>
+        <form onSubmit={this.onSubmitForm}>
+          <input maxLength={4} value={value} onChange={this.onChangeInput} />
+          <button>입력</button>
         </form>
-        <div>시도: {this.state.tries.length}</div>
+        <div>시도: {tries.length}</div>
         <ul>
-          {this.state.tries.map((value, index) => {
-            return (
-              <li key={value.fruit + value.taste}>
-                {index + 1}. {value.fruit} : {value.taste}
-              </li>
-            );
+          {tries.map((v, i) => {
+            return <Try key={`${i + 1}차 시도`} value={v} index={i} />;
           })}
         </ul>
       </>
