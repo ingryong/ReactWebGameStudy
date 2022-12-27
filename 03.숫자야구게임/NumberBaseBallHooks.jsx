@@ -2,7 +2,7 @@ import React, { Component, useState } from 'react';
 import Try from './TryHooks';
 
 // 숫자 네 개를 랜덤하게 뽑는 함수
-function getNumbers() {
+const getNumbers = () => {
   const candidate = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   const array = [];
   for (let i = 0; i < 4; i += 1) {
@@ -10,12 +10,12 @@ function getNumbers() {
     array.push(chosen);
   }
   return array;
-}
+};
 
 const NumberBaseBall = () => {
   const [result, setResult] = useState('');
   const [value, setValue] = useState('');
-  const [answer, setAnswer] = useState(getNumbers());
+  const [answer, setAnswer] = useState(getNumbers);
   const [tries, setTries] = useState([]);
 
   // 입력버튼 클릭 후 이벤트
