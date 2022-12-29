@@ -52,13 +52,27 @@ class ReactionRateClass extends Component {
     }
   };
 
+  reset = () => {
+    clearTimeout(this.timeout);
+    this.setState(() => {
+      return {
+        state: 'waiting',
+        message: '클릭하면 시작됩니다.',
+        result: [],
+      };
+    });
+  };
+
   // 평균시간 구하기
   renderAverage = () => {
     const { result } = this.state;
     return !result.length ? null : (
       <div>
-        반응 속도 : {result[result.length - 1]}ms <br />
+        반응 속도 : {result[result.length - 1]}ms
+        <br />
         평균 시간 : {result.reduce((a, c) => a + c) / result.length}ms
+        <br />
+        <button onClick={this.reset}>Reset</button>
       </div>
     );
   };
