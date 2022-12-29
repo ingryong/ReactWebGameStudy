@@ -6,7 +6,7 @@ import ReactionRateHooks from './ReactionRateHooks';
 
 ReactDom.render(
   <>
-    <ReactionRateClass />
+    <ReactionRateHooks />
   </>,
   document.querySelector('#root')
 );

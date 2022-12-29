@@ -53,11 +53,8 @@ class ReactionRateClass extends Component {
   };
 
   reset = () => {
-    clearTimeout(this.timeout);
     this.setState(() => {
       return {
-        state: 'waiting',
-        message: '클릭하면 시작됩니다.',
         result: [],
       };
     });
@@ -72,7 +69,7 @@ class ReactionRateClass extends Component {
         <br />
         평균 시간 : {result.reduce((a, c) => a + c) / result.length}ms
         <br />
-        <button onClick={this.reset}>Reset</button>
+        <button onClick={this.reset}>기록 리셋</button>
       </div>
     );
   };
