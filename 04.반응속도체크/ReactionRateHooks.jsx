@@ -5,7 +5,7 @@ const ReactionRateClassHooks = () => {
   const [message, setMessage] = useState('클릭하면 시작됩니다.');
   const [result, setResult] = useState([]);
 
-  // Hooks에서는 useRef()와 xxx.current를 사용해야 함
+  // Hooks에서는 렌더링 되지 않는 변수는 useRef()와 xxx.current를 사용해야 함
   const startTime = useRef();
   const endTime = useRef();
   const timeOut = useRef(null);
