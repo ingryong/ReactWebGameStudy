@@ -55,7 +55,7 @@ const LottoHooks = () => {
     setBonus(null);
     setRedo(false);
     timeouts.current = [];
-  }, []);
+  }, [winNumbers]);
 
   return (
     <>
