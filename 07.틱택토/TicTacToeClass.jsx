@@ -1,10 +1,16 @@
 import React, { Component } from 'react';
+import Table from './Table';
 
 class TicTacToeClass extends Component {
+  state = {
+    winner: '',
+  };
   render() {
+    const { winner } = this.state;
     return (
       <>
-        <div>TictactoeClass</div>
+        <Table />
+        {winner && <div>{winner}님의 승리</div>}
       </>
     );
   }
