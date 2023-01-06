@@ -1,8 +1,11 @@
 import React, { useReducer } from 'react';
+import Form from './Form';
 import Table from './Table';
 
 const initialState = {
   tableData: [],
+  timer: 0,
+  result: '',
 };
 
 const reducer = (state, action) => {
@@ -15,6 +18,13 @@ const reducer = (state, action) => {
 const MineSearch = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  return <Table />;
+  return (
+    <>
+      <Form dispatch={dispatch} />
+      <div>{state.timer}</div>
+      <Table />
+      <div>{state.result}</div>
+    </>
+  );
 };
 export default MineSearch;
