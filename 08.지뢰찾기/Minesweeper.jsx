@@ -4,7 +4,7 @@ import Table from './Table';
 
 export const CODE = {
   MINE: -7,
-  NOMAR: -1,
+  NORMAL: -1,
   QUESTION: -2,
   FLAG: -3,
   QUESTION_MINE: -4,
@@ -15,13 +15,7 @@ export const CODE = {
 
 // contextAPI. 부모 자식간 데이터를 오갈 수 있게
 export const TableContext = createContext({
-  tableData: [
-    [-1, -1, -1, -1, -1, -1, -1],
-    [-7, -1, -1, -1, -1, -1, -1],
-    [-1, -1, -1, -1, -1, -1, -1],
-    [-1, -7, -1, -7, -7, -1, -1],
-    [-1, -1, -1, -1, -1, -1, -1],
-  ],
+  tableData: [],
   dispatchEvent: () => {},
 });
 
@@ -31,8 +25,44 @@ const initialState = {
   result: '',
 };
 
+/** 지뢰 심기 */
+const plantMine = (row, cell, mine) => {
+  console.log(row, cell, mine);
+  const candidate = Array(row * cell)
+    .fill()
+    .map((arr, i) => {
+      return i;
+    });
+  const shuffle = [];
+  while (candidate.length > row * cell - mine) {
+    const chosen = candidate.splice(Math.floor(Math.random() * candidate.length), 1)[0];
+    shuffle.push(chosen);
+  }
+  const data = [];
+  // 2차원 배열 생성
+  for (let i = 0; i < row; i++) {
+    const rowData = [];
+    data.push(rowData);
+    for (let j = 0; j < cell; j++) {
+      rowData.push(CODE.NORMAL);
+    }
+  }
+
+  // 지뢰 생성
+  for (let k = 0; k < shuffle.length; k++) {
+    const ver = Math.floor(shuffle[k] / cell);
+    const hor = shuffle[k] % cell;
+    data[ver][hor] = CODE.MINE;
+  }
+
+  console.log(data);
+  return data;
+};
+
+export const START_GAME = 'START_GAME';
+
 const reducer = (state, action) => {
-  switch ((action, type)) {
+  switch (action.type) {
     case START_GAME:
       return {
         ...state,
@@ -42,8 +72,6 @@ const reducer = (state, action) => {
       return state;
   }
 };
-
-export const START_GAME = 'START_GAME';
 
 const MineSearch = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -59,7 +87,7 @@ const MineSearch = () => {
   );
   return (
     <TableContext.Provider value={value}>
-      <Form dispatch={dispatch} />
+      <Form />
       <div>{state.timer}</div>
       <Table />
       <div>{state.result}</div>

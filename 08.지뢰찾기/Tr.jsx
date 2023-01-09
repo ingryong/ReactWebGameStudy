@@ -1,9 +1,15 @@
-import React from 'react';
-import Td from './Table';
-const Tr = () => {
+import React, { useContext } from 'react';
+import Td from './Td';
+import { TableContext } from './Minesweeper';
+
+const Tr = ({ rowIndex }) => {
+  const { tableData } = useContext(TableContext);
   return (
     <tr>
-      <Td />
+      {tableData[0] &&
+        Array(tableData[0].length)
+          .fill()
+          .map((tr, i) => <Td rowIndex={rowIndex} cellIndex={i} />)}
     </tr>
   );
 };

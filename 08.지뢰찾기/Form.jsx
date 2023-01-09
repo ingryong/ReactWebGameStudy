@@ -22,7 +22,7 @@ const Form = () => {
   }, []);
 
   const onClickBtn = useCallback(() => {
-    dispatch({ sype: START_GAME, row, cell, mine });
+    dispatch({ type: START_GAME, row, cell, mine });
   }, [row, cell, mine]);
 
   return (
