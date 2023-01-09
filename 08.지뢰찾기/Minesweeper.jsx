@@ -29,7 +29,6 @@ const initialState = {
 
 /** 지뢰 심기 */
 const plantMine = (row, cell, mine) => {
-  console.log(row, cell, mine);
   const candidate = Array(row * cell)
     .fill()
     .map((arr, i) => {
@@ -57,7 +56,6 @@ const plantMine = (row, cell, mine) => {
     data[ver][hor] = CODE.MINE;
   }
 
-  console.log(data);
   return data;
 };
 
@@ -81,6 +79,32 @@ const reducer = (state, action) => {
       const tableData = [...state.tableData];
       tableData[action.row] = [...state.tableData[action.row]];
       tableData[action.row][action.cell] = CODE.OPENED;
+
+      let around = [];
+      // 주위 8칸 중 위쪽 셀이 있을 경우
+      if (tableData[action.row - 1]) {
+        // 위 3개
+        around = around.concat(
+          tableData[action.row - 1][action.cell - 1],
+          tableData[action.row - 1][action.cell],
+          tableData[action.row - 1][action.cell + 1]
+        );
+      }
+      // 가운데 양 옆
+      around = around.concat(tableData[action.row][action.cell - 1], tableData[action.row][action.cell + 1]);
+      // 주위 8칸 중 아래쪽 셀이 있을 경우
+      if (tableData[action.row + 1]) {
+        // 아래 3개
+        around = around.concat(
+          tableData[action.row + 1][action.cell - 1],
+          tableData[action.row + 1][action.cell],
+          tableData[action.row + 1][action.cell + 1]
+        );
+      }
+      // 주위 지뢰 개수 보여줌
+      const count = around.filter(v => [CODE.MINE, CODE.FLAG_MINE, CODE.QUESTION_MINE].includes(v)).length;
+      console.log(around, count);
+      tableData[action.row][action.cell] = count;
       return {
         ...state,
         tableData,

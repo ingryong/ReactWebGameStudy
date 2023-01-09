@@ -12,6 +12,10 @@ const getTdStyle = code => {
       return {
         background: 'white',
       };
+    case CODE.CLICKED_MINE:
+      return {
+        background: 'red',
+      };
     case CODE.QUESTION_MINE:
     case CODE.QUESTION:
       return {
@@ -37,7 +41,7 @@ const getTdText = code => {
     case CODE.MINE:
       return 'X';
     case CODE.CLICKED_MINE:
-      return '❌';
+      return '💣';
     case CODE.FLAG_MINE:
     case CODE.FLAG:
       return '🚩';
@@ -51,12 +55,12 @@ const getTdText = code => {
 
 const Td = memo(({ rowIndex, cellIndex }) => {
   const { tableData, dispatch, halted } = useContext(TableContext);
-  if (halted) {
-    return;
-  }
 
   /** 왼쪽클릭하게 되면 해당 위치의 타입을 변경하도록 dispatch(보내기) 해줌 */
   const onClickTd = useCallback(() => {
+    if (halted) {
+      return;
+    }
     switch (tableData[rowIndex][cellIndex]) {
       case CODE.OPENED:
       case CODE.FLAG_MINE:
