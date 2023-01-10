@@ -21,6 +21,7 @@ const Form = () => {
     setMine(e.target.value);
   }, []);
 
+  /** 시작 버튼 클릭 시 input에 담긴 정보와 START_GAME을 보냄 */
   const onClickBtn = useCallback(() => {
     dispatch({ type: START_GAME, row, cell, mine });
   }, [row, cell, mine]);

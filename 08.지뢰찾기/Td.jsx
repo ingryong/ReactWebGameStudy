@@ -1,5 +1,13 @@
 import React, { memo, useCallback, useContext } from 'react';
-import { CLICK_MINE, CODE, FLAG_CELL, NORMALIZE_CELL, OPEN_CELL, QUESTION_CELL, TableContext } from './Minesweeper';
+import {
+  CLICK_MINE,
+  CODE,
+  FLAG_CELL,
+  NORMALIZE_CELL,
+  OPEN_CELL,
+  QUESTION_CELL,
+  TableContext,
+} from './Minesweeper';
 
 const getTdStyle = code => {
   switch (code) {
@@ -107,7 +115,11 @@ const Td = memo(({ rowIndex, cellIndex }) => {
   );
 
   return (
-    <td style={getTdStyle(tableData[rowIndex][cellIndex])} onClick={onClickTd} onContextMenu={onRightClickTd}>
+    <td
+      style={getTdStyle(tableData[rowIndex][cellIndex])}
+      onClick={onClickTd}
+      onContextMenu={onRightClickTd}
+    >
       {getTdText(tableData[rowIndex][cellIndex])}
     </td>
   );
