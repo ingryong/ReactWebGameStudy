@@ -120,7 +120,7 @@ const reducer = (state, action) => {
             tableData[row - 1][cell + 1]
           );
         }
-        if (tableData[action.row + 1]) {
+        if (tableData[row + 1]) {
           // 아래 3개
           around = around.concat(
             tableData[row + 1][cell - 1],
@@ -132,8 +132,6 @@ const reducer = (state, action) => {
         const count = around.filter(function (v) {
           return [CODE.MINE, CODE.FLAG_MINE, CODE.QUESTION_MINE].includes(v);
         }).length;
-        console.log(around, count);
-        tableData[action.row][action.cell] = count;
 
         // 주변 칸이 모두 0일 경우 주변의 주변을 찾음
         if (count === 0) {
