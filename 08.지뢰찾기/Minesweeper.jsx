@@ -1,4 +1,4 @@
-import React, { createContext, useMemo, useReducer } from 'react';
+import React, { createContext, useEffect, useMemo, useReducer } from 'react';
 import Form from './Form';
 import Table from './Table';
 
@@ -22,9 +22,15 @@ export const TableContext = createContext({
 
 const initialState = {
   tableData: [],
+  data: {
+    row: 0,
+    cell: 0,
+    mine: 0,
+  },
   timer: 0,
   result: '',
   halted: true, // true일 경우 게임 중단
+  openedCount: 0,
 };
 
 /** 지뢰 심기 */
@@ -66,6 +72,7 @@ export const CLICK_MINE = 'CLICK_MINE';
 export const FLAG_CELL = 'FLAG_CELL';
 export const QUESTION_CELL = 'QUESTION_CELL';
 export const NORMALIZE_CELL = 'NORMALIZE_CELL';
+export const INCREMENT_TIMER = 'INCREMENT_TIMER';
 
 /** Td.jsx에서 보내온 클릭 값을 CODE.~~~ 로 변경해줌 */
 const reducer = (state, action) => {
@@ -74,8 +81,16 @@ const reducer = (state, action) => {
     case START_GAME:
       return {
         ...state,
+        data: {
+          row: action.row,
+          cell: action.cell,
+          mine: action.mine,
+        },
+        openedCount: 0,
+        result: '',
         tableData: plantMine(action.row, action.cell, action.mine),
         halted: false,
+        timer: 0,
       };
 
     /** 셀 클릭해서 열었을 때 */
@@ -87,6 +102,7 @@ const reducer = (state, action) => {
 
       /** 내 기준 주변 칸 검사 */
       const checked = [];
+      let openedCount = 0;
       const checkAround = (row, cell) => {
         // 상하좌우 칸이 아닐 경우 열지 않음
         if (row < 0 || row >= tableData.length || cell < 0 || cell >= tableData[0].length) {
@@ -152,22 +168,36 @@ const reducer = (state, action) => {
               near.push([row + 1, cell]);
               near.push([row + 1, cell + 1]);
             }
-            near
-              .filter(v => !!v)
-              .forEach(n => {
-                if (tableData[n[0]][n[1]] !== CODE.OPENED) {
-                  checkAround(n[0], n[1]);
-                }
-              });
+            near.forEach(n => {
+              if (tableData[n[0]][n[1]] !== CODE.OPENED) {
+                checkAround(n[0], n[1]);
+              }
+            });
           }
+        }
+        // 닫힌 칸을 열 때 카운트 증가
+        if (tableData[row][cell] === CODE.NORMAL) {
+          openedCount += 1;
         }
         tableData[row][cell] = count;
       };
       checkAround(action.row, action.cell);
 
+      /** 승리조건 */
+      let halted = false;
+      let result = '';
+      console.log(state.data.row * state.data.cell - state.data.mine, state.openedCount, openedCount);
+      if (state.data.row * state.data.cell - state.data.mine === state.openedCount + openedCount) {
+        halted = true;
+        result = `${state.timer}초 만에 승리하셨습니다.`;
+      }
+
       return {
         ...state,
         tableData,
+        openedCount: state.openedCount + openedCount,
+        halted,
+        result,
       };
     }
 
@@ -223,7 +253,12 @@ const reducer = (state, action) => {
         tableData,
       };
     }
-
+    case INCREMENT_TIMER: {
+      return {
+        ...state,
+        timer: state.timer + 1,
+      };
+    }
     default:
       return state;
   }
@@ -236,6 +271,18 @@ const MineSearch = () => {
   // contextAPI는 리렌더링 될 때마다 데이터를 다시 불러오면서 자식 컴포넌트들도 리랜더링 되므로 성능적으로 문제가 있을 수 있음
   // useMemo로 캐싱해주어 위 방식의 성능 저하 문제를 보완할 수 있음
   const value = useMemo(() => ({ tableData, halted, dispatch }), [tableData, halted]);
+
+  useEffect(() => {
+    let timer;
+    if (halted === false) {
+      timer = setInterval(() => {
+        dispatch({ type: INCREMENT_TIMER });
+      }, 1000);
+    }
+    return () => {
+      clearInterval(timer);
+    };
+  }, [halted]);
 
   return (
     <TableContext.Provider value={value}>
