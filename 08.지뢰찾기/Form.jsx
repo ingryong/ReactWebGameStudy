@@ -1,8 +1,8 @@
-import React, { useCallback, useContext, useState } from 'react';
+import React, { memo, useCallback, useContext, useState } from 'react';
 import { START_GAME, TableContext } from './Minesweeper';
 
 /** 가로/세로/지뢰 개수 나타냄 */
-const Form = () => {
+const Form = memo(() => {
   const [row, setRow] = useState(10);
   const [cell, setCell] = useState(10);
   const [mine, setMine] = useState(20);
@@ -34,5 +34,5 @@ const Form = () => {
       <button onClick={onClickBtn}>시작</button>
     </div>
   );
-};
+});
 export default Form;
